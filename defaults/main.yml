@@ -35,7 +35,7 @@ laniakea_galaxy_server_dir: '{{ galaxy_install_path }}/server'
 # flavor restore
 
 # Galaxy flavor to restore 
-galaxy_flavor: galaxy-testing
+galaxy_flavor: galaxy-minimal
 
 # Destination of tool repository
 shed_tool_destination: '/export/tool_deps'
