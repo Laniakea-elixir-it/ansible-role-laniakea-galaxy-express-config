@@ -40,8 +40,9 @@
  
 ##implant selected flavor
 - include: restore_flavor.yml
+  when: galaxy_flavor != 'galaxy-minimal'
 
-- include: nginx_upload.yml
+- include: nginx.yml
 
 - include: job_conf.yml
 
