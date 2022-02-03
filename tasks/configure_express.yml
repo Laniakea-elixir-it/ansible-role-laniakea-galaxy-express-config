@@ -5,22 +5,30 @@
     name: "{{ 'galaxy' if (uwsgi_mode == 'mule') else 'galaxy-zergling@0'}}"
     state: stopped
 
-- name: sudo wo a psswd for galaxy user(maybe move it to image creation)
-  lineinfile:
-    path: /etc/sudoers
-    state: present
-    line: galaxy ALL=(ALL) NOPASSWD:ALL
-
+#- name: sudo wo a psswd for galaxy user(maybe move it to image creation)
+#  lineinfile:
+#    path: /etc/sudoers
+#    state: present
+#    line: galaxy ALL=(ALL) NOPASSWD:ALL
   
-- name: create log file directory (maybe move it to image creation)
-  file:
-    path: /var/log/galaxy
-    state: directory
-    owner: galaxy 
-    group: galaxy
-    mode: 755
+#- name: create log file directory (maybe move it to image creation)
+#  file:
+#    path: /var/log/galaxy
+#    state: directory
+#    owner: galaxy 
+#    group: galaxy
+#    mode: 755
 
-- name: substitute galaxy config
+- name: create/check destinations
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - "{{ tool_deps_path }}"
+    - "{{ shed_tool_destination }}"
+
+- name: Update Galaxy configuration
   template:
     src: galaxy.yml.j2
     dest: "{{ laniakea_galaxy_config_file }}"
