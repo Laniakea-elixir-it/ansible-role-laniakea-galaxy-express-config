@@ -27,6 +27,7 @@
   with_items:
     - "{{ tool_deps_path }}"
     - "{{ shed_tool_destination }}"
+    - "/var/log/galaxy"
 
 - name: Update Galaxy configuration
   template:
