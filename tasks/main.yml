@@ -44,6 +44,10 @@
 
 - include: nginx.yml
 
-- include: job_conf.yml
+- name: Set default job conf
+  import_tasks: job_conf.yml
+  become: yes
+  become_user: galaxy
+  when: uwsgi_mode == "zerg"
 
 - include: service_restart.yml
