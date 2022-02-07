@@ -35,6 +35,9 @@ laniakea_galaxy_server_dir: '{{ galaxy_install_path }}/server'
 laniakea_galaxy_user: galaxy 
 laniakea_galaxy_group: galaxy
 
+# Postgresql service name
+postgresql_service: 'postgresql-10'
+
 #______________________________________
 # flavor restore
 
