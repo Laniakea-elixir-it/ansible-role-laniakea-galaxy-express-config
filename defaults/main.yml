@@ -48,7 +48,7 @@ galaxy_flavor: galaxy-minimal
 shed_tool_destination: '/export/tool_deps'
 
 # cvmfs that contain the flavor packages
-restore_cvmfs_repository: elixir-italy.galaxy.refdata
+restore_cvmfs_repository: tools.elixir-italy-cvmfs
 
 #______________________________________
 # Galaxy administrator

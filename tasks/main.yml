@@ -16,7 +16,7 @@
   become: true
   become_user: root
   get_url:
-    url: 'https://raw.githubusercontent.com/indigo-dc/Reference-data-galaxycloud-repository/master/{{ item.conf_file }}/{{ restore_cvmfs_repository}}.{{ item.ext }}'
+    url: 'https://raw.githubusercontent.com/Laniakea-elixir-it/tools-laniakea-cvmfs/main/{{ item.conf_file }}/{{ restore_cvmfs_repository}}.{{ item.ext }}'
     dest: '/etc/cvmfs/{{ item.dest_dir }}/{{ restore_cvmfs_repository}}.{{ item.ext }}'
     mode: '444'
   with_items:
@@ -25,7 +25,7 @@
 
 - name: probe elixir cvmfs
   shell:
-    cmd: 'cvmfs_config probe {{ restore_cvmfs_repository}}'
+    cmd: 'cvmfs_config probe {{ restore_cvmfs_repository }}'
 
 ### install proftpd
 - include: proftpd.yml
