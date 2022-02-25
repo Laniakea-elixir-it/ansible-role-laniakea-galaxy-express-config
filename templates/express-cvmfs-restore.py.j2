@@ -10,13 +10,36 @@ conda_destination='{{ tool_deps_path }}/'
 shed_tool_destination='{{ shed_tool_destination }}/'
 cvmfs= "{{ restore_cvmfs_repository }}"
 cvmfs_path='/cvmfs/'+ cvmfs + '/'
-cvmfs_dump= cvmfs_path + '/express-dump/'
+dump_dir='/dump/' 
+cvmfs_dump= cvmfs_path + dump_dir
+
 config_dir='{{ laniakea_galaxy_config_dir }}'
 
 def parse_cli_options():
   parser = argparse.ArgumentParser(description='untar flavor packages', formatter_class=argparse.RawTextHelpFormatter)
   parser.add_argument( '-f', '--flavor',  dest='flavor', default=None , help='galaxy flavor')
+  parser.add_argument( '-v', '--version',  dest='version', default=1 , help='galaxy flavor version')
+  parser.add_argument( '-g', '--galaxy',  dest='galaxy', default=20.05 , help='galaxy release')
   return parser.parse_args()
+
+def run_command(cmd, logger=None):
+    """
+    Run subprocess call redirecting stdout, stderr and the command exit code.
+    """
+    proc = subprocess.Popen(args=cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    communicateRes = proc.communicate()
+    stdout, stderr = [x.decode('utf-8') for x in communicateRes]
+    status = proc.wait()
+
+    # Functionality to replicate cmd >> "$LOGFILE" 2>&1
+    if logger != None:
+        logger.debug(f'Command: {cmd}\nStdout: {stdout}\nStderr: {stderr}')
+
+    return stdout, stderr, status
+def define_packages_path():
+    options = parse_cli_options()
+    package_path= cvmfs_dump + 'release_'+str(options.galaxy)+'_'+str(options.flavor)+'_'+str(options.version)+'/'
+    return package_path
 
 def extract_tar_gz(tar_file, destination):
   check_cvmfs()
@@ -41,45 +64,45 @@ def clean_destinations():
       shutil.rmtree(f)
     for f in shed_tools:
       shutil.rmtree(f)
- 
 
+##e.g release_20.05_galaxy-testing-lite_1
 def untar_conda_and_shell():
-    options = parse_cli_options()
-    conda_file = cvmfs_dump + str(options.flavor) + '/'+ str(options.flavor) + '_conda.tar.gz'
-    shed_tools_file = cvmfs_dump + str(options.flavor) + '/' + str(options.flavor) +'_shed_tools.tar.gz'
-    shed_tools_config = cvmfs_dump + str(options.flavor) + '/shed_tool_conf.xml'
+    package_path = define_packages_path()
+    conda_file = package_path + 'tar_conda.tar.gz'
+    shed_tools_file = package_path +'tar_shed_tools.tar.gz'
+    shed_tools_config = package_path + 'shed_tool_conf.xml'
     clean_destinations()
     print("FLAVOR_RESTORE: cleaning")
     extract_tar_gz(shed_tools_file, shed_tool_destination)
     print("FLAVOR_RESTORE: restoring shed_tools")
     extract_tar_gz(conda_file, conda_destination)
     print("FLAVOR_RESTORE: restoring conda dir")
-    command_copy_config="cp "+ str(shed_tools_config)+" "+ str(config_dir) 
-    os.system(command_copy_config)
+    command_copy_config="cp "+ str(shed_tools_config)+" "+ str(config_dir)
+    run_command(command_copy_config)
 
 # bash restore postgresql pg_restore -d db_name /path/to/your/file/dump_name.tar -c -U db_user
 def manage_services(smd_cmd):
-  os.system("sudo systemctl " + smd_cmd + " galaxy")
+  run_command("sudo systemctl " + smd_cmd + " galaxy")
 
 def restore_dump():
-  options = parse_cli_options()
-  command_delete = " sudo -H -u postgres bash -c 'dropdb galaxy_tools' " 
-  command_create = " sudo -H -u postgres bash -c 'createdb galaxy_tools' " 
-  os.system(command_delete)
-  os.system(command_create)
+  package_path = define_packages_path()
+  command_delete = " sudo -H -u postgres bash -c 'dropdb galaxy_tools' "
+  command_create = " sudo -H -u postgres bash -c 'createdb galaxy_tools' "
+  run_command(command_delete)
+  run_command(command_create)
   print("old postgres galaxy_tools database deleted")
-  restore_file = cvmfs_dump + str(options.flavor) + '/'+ str(options.flavor) + '.sql'
-  command_restore = "sudo -H -u postgres bash -c 'psql -U postgres -d galaxy_tools -f " + restore_file + "'" 
-  os.system(command_restore)
+  restore_file = package_path + 'dump.psql'
+  command_restore = "sudo -H -u postgres bash -c 'psql -U postgres -d galaxy_tools -f " + restore_file + "'"
+  run_command(command_restore)
   print("restore galaxy_tools database flavor")
 
 def lock_file():
     options = parse_cli_options()
     command_file = "sudo touch /tmp/"+str(options.flavor)
-    os.system(command_file)
+    run_command(command_file)
 
 def main():
-    
+
   manage_services("stop")
   untar_conda_and_shell()
   restore_dump()
@@ -88,3 +111,4 @@ def main():
   lock_file()
 
 main()
+
