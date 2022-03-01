@@ -18,7 +18,7 @@ config_dir='{{ laniakea_galaxy_config_dir }}'
 def parse_cli_options():
   parser = argparse.ArgumentParser(description='untar flavor packages', formatter_class=argparse.RawTextHelpFormatter)
   parser.add_argument( '-f', '--flavor',  dest='flavor', default=None , help='galaxy flavor')
-  parser.add_argument( '-v', '--version',  dest='version', default=1 , help='galaxy flavor version')
+  parser.add_argument( '-v', '--version',  dest='version', default=7 , help='galaxy flavor version')
   parser.add_argument( '-g', '--galaxy',  dest='galaxy', default=20.05 , help='galaxy release')
   return parser.parse_args()
 
@@ -36,6 +36,7 @@ def run_command(cmd, logger=None):
         logger.debug(f'Command: {cmd}\nStdout: {stdout}\nStderr: {stderr}')
 
     return stdout, stderr, status
+
 def define_packages_path():
     options = parse_cli_options()
     package_path= cvmfs_dump + 'release_'+str(options.galaxy)+'_'+str(options.flavor)+'_'+str(options.version)+'/'
@@ -71,8 +72,11 @@ def untar_conda_and_shell():
     conda_file = package_path + 'tar_conda.tar.gz'
     shed_tools_file = package_path +'tar_shed_tools.tar.gz'
     shed_tools_config = package_path + 'shed_tool_conf.xml'
-    clean_destinations()
-    print("FLAVOR_RESTORE: cleaning")
+    if os.path.exists(conda_destination +'_conda'):
+      clean_destinations()
+      print("FLAVOR_RESTORE: cleaning")
+    else:
+      print("clean destination not needed")
     extract_tar_gz(shed_tools_file, shed_tool_destination)
     print("FLAVOR_RESTORE: restoring shed_tools")
     extract_tar_gz(conda_file, conda_destination)

@@ -45,7 +45,7 @@ postgresql_service: 'postgresql-10'
 galaxy_flavor: galaxy-minimal
 
 # Destination of tool repository
-shed_tool_destination: '/export/tool_deps'
+shed_tool_destination: '/home/galaxy/galaxy/var/shed_tools'
 
 # cvmfs that contain the flavor packages
 restore_cvmfs_repository: tools.elixir-italy-cvmfs
