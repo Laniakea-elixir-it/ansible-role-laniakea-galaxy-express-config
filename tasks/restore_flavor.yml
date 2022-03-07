@@ -33,7 +33,7 @@
 
 - name: run python script to restore flavor
   become: true
-  command: /tmp/express-cvmfs-restore.py -f {{ galaxy_flavor }} 
+  command: /tmp/express-cvmfs-restore.py -f {{ galaxy_flavor }} -v {{ galaxy_flavor_version }} -g {{ galaxy_version }}
   when: not flavor.stat.exists
   register: restore_script
 
@@ -41,7 +41,7 @@
   become: true
   become_user: galaxy
   shell: '. {{ laniakea_galaxy_venv_dir }}/bin/activate && workflow-install \
-  -w /cvmfs/{{ restore_cvmfs_repository }}/dump/release_20.05_{{ galaxy_flavor }}_1/workflows \ 
+  -w /cvmfs/{{ restore_cvmfs_repository }}/dump/{{ galaxy_version }}_{{ galaxy_flavor }}_{{ galaxy_flavor_version }}/workflows \ 
   -a {{ GALAXY_ADMIN_API_KEY }} -g http://localhost:80'
   when: restore_script is changed
   tags:

@@ -44,12 +44,15 @@ postgresql_service: 'postgresql-10'
 # Galaxy flavor to restore 
 galaxy_flavor: galaxy-minimal
 
+# Galaxy flavor version to restore
+galaxy_flavor_version: 1 
 # Destination of tool repository
 shed_tool_destination: '/home/galaxy/galaxy/var/shed_tools'
 
 # cvmfs that contain the flavor packages
 restore_cvmfs_repository: tools.elixir-italy-cvmfs
 
+galaxy_version: release_20.05
 #______________________________________
 # Galaxy administrator
 

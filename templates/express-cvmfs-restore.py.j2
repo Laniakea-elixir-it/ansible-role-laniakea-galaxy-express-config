@@ -39,7 +39,7 @@ def run_command(cmd, logger=None):
 
 def define_packages_path():
     options = parse_cli_options()
-    package_path= cvmfs_dump + 'release_'+str(options.galaxy)+'_'+str(options.flavor)+'_'+str(options.version)+'/'
+    package_path= cvmfs_dump + str(options.galaxy)+'_'+str(options.flavor)+'_'+str(options.version)+'/'
     return package_path
 
 def extract_tar_gz(tar_file, destination):
