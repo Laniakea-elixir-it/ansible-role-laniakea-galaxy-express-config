@@ -18,7 +18,7 @@ config_dir='{{ laniakea_galaxy_config_dir }}'
 def parse_cli_options():
   parser = argparse.ArgumentParser(description='untar flavor packages', formatter_class=argparse.RawTextHelpFormatter)
   parser.add_argument( '-f', '--flavor',  dest='flavor', default=None , help='galaxy flavor')
-  parser.add_argument( '-v', '--version',  dest='version', default=7 , help='galaxy flavor version')
+  parser.add_argument( '-v', '--version',  dest='version', default=1 , help='galaxy flavor version')
   parser.add_argument( '-g', '--galaxy',  dest='galaxy', default=20.05 , help='galaxy release')
   return parser.parse_args()
 
