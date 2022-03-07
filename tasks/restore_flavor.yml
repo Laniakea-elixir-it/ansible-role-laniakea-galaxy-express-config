@@ -41,7 +41,7 @@
   become: true
   become_user: galaxy
   shell: '. {{ laniakea_galaxy_venv_dir }}/bin/activate && workflow-install \
-  -w /cvmfs/elixir-italy.galaxy.refdata/express-dump/{{ galaxy_flavor }}/workflows \ 
+  -w /cvmfs/{{ restore_cvmfs_repository }}/dump/release_20.05_{{ galaxy_flavor }}_1/workflows \ 
   -a {{ GALAXY_ADMIN_API_KEY }} -g http://localhost:80'
   when: restore_script is changed
   tags:
