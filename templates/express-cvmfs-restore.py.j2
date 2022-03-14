@@ -87,6 +87,7 @@ def untar_conda_and_shell():
 # bash restore postgresql pg_restore -d db_name /path/to/your/file/dump_name.tar -c -U db_user
 def manage_services(smd_cmd):
   run_command("sudo systemctl " + smd_cmd + " galaxy")
+  run_command("sudo systemctl " + smd_cmd + " nginx")
 
 def restore_dump():
   package_path = define_packages_path()
