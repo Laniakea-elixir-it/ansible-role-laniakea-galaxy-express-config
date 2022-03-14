@@ -37,12 +37,17 @@
   when: not flavor.stat.exists
   register: restore_script
 
+- name: check if dir workflows exists
+  stat: 
+    path: "/cvmfs/{{ restore_cvmfs_repository }}/dump/{{ galaxy_version }}_{{ galaxy_flavor }}_{{ galaxy_flavor_version }}/workflows"
+  register: workflows
+
 - name: install workflows  
   become: true
   become_user: galaxy
   shell: '. {{ laniakea_galaxy_venv_dir }}/bin/activate && workflow-install \
-  -w /cvmfs/{{ restore_cvmfs_repository }}/dump/{{ galaxy_version }}_{{ galaxy_flavor }}_{{ galaxy_flavor_version }}/workflows \ 
+  -w {{ workflows.stat.path }} \ 
   -a {{ GALAXY_ADMIN_API_KEY }} -g http://localhost:80'
-  when: restore_script is changed
+  when: workflows.stat.exists
   tags:
     - workflows
