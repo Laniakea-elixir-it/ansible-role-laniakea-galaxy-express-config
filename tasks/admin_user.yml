@@ -24,6 +24,12 @@
     mode: 775
   when: result.failed or not result.query_result[0].exists
 
+- name: Set Password from vault
+  set_fact:
+    GALAXY_ADMIN_PASSWORD: '{{ vault_secrets.data.storage_encryption_key }}'
+  no_log: True
+  when: retrieve_passphrase_from_vault
+
 - name: Create galaxy user with API_KEY to install tools
   # become: true
   # become_user: galaxy
