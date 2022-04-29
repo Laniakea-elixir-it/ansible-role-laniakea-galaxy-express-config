@@ -34,7 +34,10 @@
   set_fact:
     GALAXY_ADMIN_PASSWORD: '{{ vault_secrets.data.admin_password }}'
   #no_log: True
-  when: retrieve_passphrase_from_vault
+  #when: retrieve_passphrase_from_vault
+
+- debug:
+    msg: '{{ retrieve_passphrase_from_vault }} '
 
 - debug:
     msg: '{{ GALAXY_ADMIN_PASSWORD }}'
