@@ -24,11 +24,20 @@
     mode: 775
   when: result.failed or not result.query_result[0].exists
 
+- debug:
+    msg: '{{ vault_secrets.data.admin_password }}'
+
+- debug:
+    msg: '{{ GALAXY_ADMIN_PASSWORD }}'
+
 - name: Set Password from vault
   set_fact:
     GALAXY_ADMIN_PASSWORD: '{{ vault_secrets.data.admin_password }}'
-  no_log: True
+  #no_log: True
   when: retrieve_passphrase_from_vault
+
+- debug:
+    msg: '{{ GALAXY_ADMIN_PASSWORD }}'
 
 - name: Create galaxy user with API_KEY to install tools
   # become: true
