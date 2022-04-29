@@ -20,6 +20,7 @@ def parse_cli_options():
   parser.add_argument( '-f', '--flavor',  dest='flavor', default=None , help='galaxy flavor')
   parser.add_argument( '-v', '--version',  dest='version', default=1 , help='galaxy flavor version')
   parser.add_argument( '-g', '--galaxy',  dest='galaxy', default=20.05 , help='galaxy release')
+  parser.add_argument( '-i', '--image',  dest='image', default="galaxy-express_v3.0.2" , help='galaxy release')
   return parser.parse_args()
 
 def run_command(cmd, logger=None):
@@ -39,7 +40,7 @@ def run_command(cmd, logger=None):
 
 def define_packages_path():
     options = parse_cli_options()
-    package_path= cvmfs_dump + str(options.galaxy)+'_'+str(options.flavor)+'_'+str(options.version)+'/'
+    package_path= cvmfs_dump + str(options.image)+'_'+str(options.galaxy)+'_'+str(options.flavor)+'_'+str(options.version)+'/'
     return package_path
 
 def extract_tar_gz(tar_file, destination):
