@@ -1,0 +1,89 @@
+server {
+    # Listen on port 80
+    listen        *:80 default_server;
+    # The virtualhost is our domain name
+    server_name   "{{ inventory_hostname }}";
+
+    # Our log files will go here.
+    access_log  /var/log/nginx/access.log;
+    error_log   /var/log/nginx/error.log;
+    # Hide nginx version 
+    server_tokens off;
+
+    # The most important location block, by default all requests are sent to uWSGI
+    location /galaxy {
+        # This is the backend to send the requests to.
+        uwsgi_pass 127.0.0.1:4001;
+        uwsgi_param UWSGI_SCHEME $scheme;
+        include uwsgi_params;
+    }
+
+    # Static files can be more efficiently served by Nginx. Why send the
+    # request to uWSGI which should be spending its time doing more useful
+    # things like serving Galaxy!
+    location /galaxy/static {
+        alias {{ laniakea_galaxy_server_dir }}/static;
+        expires 24h;
+    }
+
+    # The style directory is in a slightly different location
+    location /galaxy/static/style {
+        alias {{ laniakea_galaxy_server_dir }}/static/style;
+        expires 24h;
+    }
+
+    # In Galaxy instances started with run.sh, many config files are
+    # automatically copied around. The welcome page is one of them. In
+    # production, this step is skipped, so we will manually alias that.
+    location /galaxy/static/welcome.html {
+        alias {{ laniakea_galaxy_server_dir }}/static/welcome.html.sample;
+        expires 24h;
+    }
+
+    # serve visualization and interactive environment plugin static content
+    location ~ ^/plugins/(?<plug_type>[^/]+?)/((?<vis_d>[^/_]*)_?)?(?<vis_name>[^/]*?)/static/(?<static_file>.*?)$ {
+        alias {{ laniakea_galaxy_server_dir }}/config/plugins/$plug_type/;
+        try_files $vis_d/${vis_d}_${vis_name}/static/$static_file
+                  $vis_d/static/$static_file =404;
+    }
+
+
+    #redirect /prefix -> /prefix
+    rewrite ^/galaxy$ /galaxy/ last;
+
+    location /robots.txt {
+        alias {{ laniakea_galaxy_server_dir }}/static/robots.txt;
+    }
+
+    location /favicon.ico {
+        alias {{ laniakea_galaxy_server_dir }}/static/favicon.ico;
+    }
+
+    location /_x_accel_redirect/ {
+         internal;
+         alias /;
+     }
+        
+     # handle file uploads via the upload module
+     location /galaxy/_upload {
+        upload_store {{ database_path }}/tmp/nginx_upload_store;
+        upload_store_access user:rw group:rw;
+        upload_pass_form_field "";
+        upload_set_form_field "__${upload_field_name}__is_composite" "true";
+        upload_set_form_field "__${upload_field_name}__keys" "name path";
+        upload_set_form_field "${upload_field_name}_name" "$upload_file_name";
+        upload_set_form_field "${upload_field_name}_path" "$upload_tmp_path";
+        upload_pass_args on;
+        upload_pass /_upload_done;
+    }
+
+    # once upload is complete, redirect to the proper galaxy path
+    location /_upload_done {
+        set $dst /galaxy/api/tools;
+        if ($args ~ nginx_redir=([^&]+)) {
+            set $dst $1;
+        }
+        rewrite "" $dst;
+    }
+}
+

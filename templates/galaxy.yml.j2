@@ -8,7 +8,7 @@ uwsgi:
     logto: /var/log/galaxy/uwsgi.log
     manage-script-name: true
     master: true
-    module: galaxy.webapps.galaxy.buildapp:uwsgi_app()
+    mount: /galaxy=galaxy.webapps.galaxy.buildapp:uwsgi_app()
     no-orphans: true
     offload-threads: 2
     processes: 3
@@ -44,6 +44,7 @@ galaxy:
     file_path: {{ database_path }}/files
     ftp_upload_dir: {{ database_path }}/ftp
     ftp_upload_site: ftp://localhost
+    galaxy_url_prefix: /galaxy
     install_database_connection: postgresql:///galaxy_tools?host=/var/run/postgresql
     integrated_tool_panel_config: {{ laniakea_galaxy_config_dir }}/integrated_tool_panel.xml
     job_config_file: {{ laniakea_galaxy_config_dir }}/job_conf.xml
@@ -53,7 +54,7 @@ galaxy:
     mulled_resolution_cache_lock_dir: {{ galaxy_install_path }}/var/mulled/lock
     new_file_path: {{ database_path }}/tmp
     new_user_dataset_access_role_default_private: 'True'
-    nginx_upload_path: /_upload
+    nginx_upload_path: /galaxy/_upload
     nginx_upload_store: {{ database_path }}/tmp/nginx_upload_store
     object_store_cache_path: {{ database_path }}/object_store_cache
     openid_config_file: {{ laniakea_galaxy_server_dir }}/config/openid_conf.xml.sample

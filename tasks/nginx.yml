@@ -1,31 +1,11 @@
-- name: configure nginx for upload store
+- name: configure nginx for upload store and /galaxy prefix
   become: yes
   become_user: root
-  blockinfile:
-    path: /etc/nginx/sites-available/galaxy 
-    insertbefore: "^}" 
-    block: |
-      location /_upload {
-          upload_store {{ database_path }}/tmp/nginx_upload_store;
-          upload_store_access user:rw group:rw;
-          upload_pass_form_field "";
-          upload_set_form_field "__${upload_field_name}__is_composite" "true";
-          upload_set_form_field "__${upload_field_name}__keys" "name path";
-          upload_set_form_field "${upload_field_name}_name" "$upload_file_name";
-          upload_set_form_field "${upload_field_name}_path" "$upload_tmp_path";
-          upload_pass_args on;
-          upload_pass /_upload_done;
-      }
-
-      # once upload is complete, redirect to the proper galaxy path
-      location /_upload_done {
-          set $dst /api/tools;
-          if ($args ~ nginx_redir=([^&]+)) {
-              set $dst $1;
-          }
-          rewrite "" $dst;
-      }
- 
+  template:
+    src: nginx/galaxy.j2
+    dest: /etc/nginx/sites-available/galaxy
+    mode: 0644
+    backup: yes
 
 
 - name: create nginx upload store path
