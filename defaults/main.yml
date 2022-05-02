@@ -53,6 +53,8 @@ shed_tool_destination: '/home/galaxy/galaxy/var/shed_tools'
 restore_cvmfs_repository: tools.elixir-italy-cvmfs
 
 galaxy_version: release_20.05
+# Express vanilla galaxy image id
+image: "galaxy-express_v3.0.2"
 #______________________________________
 # Galaxy administrator
 

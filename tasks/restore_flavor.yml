@@ -33,7 +33,7 @@
 
 - name: run python script to restore flavor
   become: true
-  command: /tmp/express-cvmfs-restore.py -f {{ galaxy_flavor }} -v {{ galaxy_flavor_version }} -g {{ galaxy_version }}
+  command: /tmp/express-cvmfs-restore.py -i {{ image }} -f {{ galaxy_flavor }} -v {{ galaxy_flavor_version }} -g {{ galaxy_version }}
   when: not flavor.stat.exists
   register: restore_script
 
