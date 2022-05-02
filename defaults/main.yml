@@ -88,3 +88,6 @@ galaxy_lrms: local
 #_____________________________________
 # uwsgi
 uwsgi_mode: mule
+
+#_____________________________________
+enable_interactive_tools: false
