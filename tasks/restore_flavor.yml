@@ -39,7 +39,7 @@
 
 - name: check if dir workflows exists
   stat: 
-    path: "/cvmfs/{{ restore_cvmfs_repository }}/dump/{{ galaxy_version }}_{{ galaxy_flavor }}_{{ galaxy_flavor_version }}/workflows"
+    path: "/cvmfs/{{ restore_cvmfs_repository }}/dump/{{ image }}_{{ galaxy_version }}_{{ galaxy_flavor }}_{{ galaxy_flavor_version }}/workflows"
   register: workflows
 
 - name: install workflows  
