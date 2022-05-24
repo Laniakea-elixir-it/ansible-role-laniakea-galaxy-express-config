@@ -88,3 +88,9 @@ galaxy_lrms: local
 #_____________________________________
 # uwsgi
 uwsgi_mode: mule
+
+#_____________________________________
+# Interactive tools
+gie_proxy:
+  session_path: /home/galaxy/galaxy/var/interactivetools_map.sqlite
+enable_interactive_tools: false

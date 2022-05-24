@@ -14,3 +14,9 @@
   systemd:
     name: nginx
     state: restarted
+
+- name: Restart docker
+  systemd:
+    name: docker
+    state: restarted
+  when: enable_interactive_tools
