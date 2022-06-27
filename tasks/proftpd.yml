@@ -31,7 +31,7 @@
     galaxy_ftp_upload_dir: '{{ database_path }}/ftp' 
 
 - name: Comment User and Group nobody
-  lineinfile:
+  replace:
     path: /etc/proftpd.conf
     regexp: '(^[^#].*nobody)'
     replace: '# \1' 
