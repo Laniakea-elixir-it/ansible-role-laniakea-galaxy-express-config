@@ -50,4 +50,6 @@
   become_user: galaxy
   when: uwsgi_mode == "zerg"
 
+- include: refdata.yml
+
 - include: service_restart.yml

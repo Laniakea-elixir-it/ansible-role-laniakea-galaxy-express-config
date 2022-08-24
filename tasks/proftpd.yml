@@ -29,16 +29,26 @@
     set_proftpd_random_password: true
     proftpd_galaxy_auth: yes
     galaxy_ftp_upload_dir: '{{ database_path }}/ftp' 
- 
-- name: comment User and Group nobody
-  lineinfile:
+
+- name: Comment User and Group nobody
+  replace:
     path: /etc/proftpd.conf
-    regexp: '^{{ item }}'
-    line: '#{{ item }}'
-    state: present
-  with_items:
-    - User
-    - Group
+    regexp: '(^[^#].*nobody)'
+    replace: '# \1' 
+
+- name: Create passive file 
+  file:
+    path: /etc/proftpd.conf.d/passive.conf
+    state: touch
+  register: passive_file
+
+- name: globally enable passive mode
+  blockinfile:
+    path: "{{ passive_file.dest }}"
+    block: |
+          <Global>
+          PassivePorts 30000 30009
+          </Global>
 
 ##TODO add     
 #    ftp_upload_dir: /data/galaxy/database/ftp
