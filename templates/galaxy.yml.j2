@@ -25,6 +25,14 @@ uwsgi:
     virtualenv: /home/galaxy/galaxy/venv
 
 galaxy:
+{% if enable_interactive_tools %}
+    galaxy_infrastructure_url: http://{{ ansible_default_ipv4.address }}/galaxy/
+    interactivetools_enable: true
+    interactivetools_map: {{ gie_proxy.session_path }}
+    tool_config_file: {{ laniakea_galaxy_server_dir }}/config/tool_conf.xml.sample,{{ laniakea_galaxy_config_dir}}/tool_conf_interactive.xml
+{% else %}
+    tool_config_file: {{ laniakea_galaxy_server_dir }}/config/tool_conf.xml.sample
+{% endif %}
     admin_users: "{{ GALAXY_ADMIN_EMAIL }}" 
     allow_user_creation: 'True'
     allow_user_impersonation: 'True'
@@ -65,7 +73,6 @@ galaxy:
     shed_tool_data_table_config: {{ laniakea_galaxy_config_dir }}/shed_tool_data_table_conf.xml
     template_cache_path: {{ database_path }}/compiled_templates
     tool_cache_data_dir: {{ database_path }}/tool_cache
-    tool_config_file: {{ laniakea_galaxy_server_dir }}/config/tool_conf.xml.sample
     tool_data_path: {{ galaxy_install_path }}/var/tool-data
     tool_data_table_config_path: /cvmfs/{{ ref_data_cvmfs_server }}/byhand/location/tool_data_table_conf.xml
     tool_dependency_dir: {{ tool_deps_path }}

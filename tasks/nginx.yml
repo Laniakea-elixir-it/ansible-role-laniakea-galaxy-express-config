@@ -7,6 +7,15 @@
     mode: 0644
     backup: yes
 
+- name: Configure nginx for interactive tools
+  become: yes
+  become_user: root
+  template:
+    src: nginx/galaxy-gie-proxy.j2
+    dest: /etc/nginx/sites-available/galaxy-gie-proxy
+    mode: 0644
+    backup: yes
+  when: enable_interactive_tools
 
 - name: create nginx upload store path
   file: 
