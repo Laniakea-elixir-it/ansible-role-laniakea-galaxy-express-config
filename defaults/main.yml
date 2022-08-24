@@ -93,4 +93,6 @@ uwsgi_mode: mule
 # Interactive tools
 gie_proxy:
   session_path: /home/galaxy/galaxy/var/interactivetools_map.sqlite
+gie_proxy_port: 8000
 enable_interactive_tools: false
+
