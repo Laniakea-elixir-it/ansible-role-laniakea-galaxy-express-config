@@ -15,6 +15,7 @@
     dest: /etc/nginx/sites-available/galaxy-gie-proxy
     mode: 0644
     backup: yes
+  when: enable_interactive_tools
 
 - name: create nginx upload store path
   file: 
