@@ -75,6 +75,7 @@ GALAXY_ADMIN_EMAIL: admin@server.com
 
 # Reference data cvmfs
 ref_data_cvmfs_server: data.galaxyproject.org
+enable_elixir_it_cvmfs: false
 
 #_____________________________________
 ## Job_conf variables
