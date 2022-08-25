@@ -30,10 +30,17 @@
   no_log: True
   when: retrieve_passphrase_from_vault
 
-- name: Create admin user random password api key
+- name: Create random admin user api key
   set_fact:
     GALAXY_ADMIN_API_KEY: "{{ lookup('password', '/dev/null length=50') }}"
   no_log: True
+  when: galaxy_admin_api_key == "random"
+
+- name: Set custom admin user api key
+  set_fact:
+    GALAXY_ADMIN_API_KEY: "{{ galaxy_admin_api_key }}"
+  no_log: True
+  when: galaxy_admin_api_key != "random"
 
 - name: Create galaxy user with API_KEY to install tools
   # become: true
