@@ -34,7 +34,8 @@
 
 ### install laniakea utils
 - name: Install laniakea-utils
-  include_role: laniakea.laniakea_utils
+  include_role:
+    name: laniakea.laniakea_utils
 
 ####
 - name: create admin user
