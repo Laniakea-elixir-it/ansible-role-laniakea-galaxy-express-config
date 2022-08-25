@@ -32,13 +32,17 @@
   become: yes
   become_user: root
 
+### install laniakea utils
+- name: Install laniakea-utils
+  include_role: laniakea.laniakea_utils
+
 ####
 - name: create admin user
   include: admin_user.yml
   become: true
   become_user: galaxy
  
-##implant selected flavor
+## add selected flavor
 - include: restore_flavor.yml
   when: galaxy_flavor != 'galaxy-minimal'
 
