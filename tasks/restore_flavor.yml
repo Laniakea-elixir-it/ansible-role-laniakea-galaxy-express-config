@@ -31,6 +31,11 @@
 #    - "{{ tool_deps_path }}"
 #    - "{{ shed_tool_destination }}"
 
+- name: "Recover right (image, galaxy release) couple"
+  set_fact:
+    image: "{{ galaxy_version.split(',').0 }}"
+    galaxy_version: "{{ galaxy_version.split(',').1 }}"
+
 - name: run python script to restore flavor
   become: true
   command: /tmp/express-cvmfs-restore.py -i {{ image }} -f {{ galaxy_flavor }} -v {{ galaxy_flavor_version }} -g {{ galaxy_version }}
