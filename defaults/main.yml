@@ -52,6 +52,10 @@ shed_tool_destination: '/home/galaxy/galaxy/var/shed_tools'
 # cvmfs that contain the flavor packages
 restore_cvmfs_repository: tools.elixir-italy-cvmfs
 
+# Galaxy version needs to be set in the form of comma separated galaxy-express image version and galaxy release,
+# e.g. galaxy-express_v4.0.0,release_21.09,
+# in order to pass to the role the right image,galaxy_release configuration.
+# The variables will be correctly set in the restore recipe.
 galaxy_version: release_20.05
 # Express vanilla galaxy image id
 image: "galaxy-express_v3.0.2"
