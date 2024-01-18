@@ -1,11 +1,11 @@
 ---
-- name: Ensure postgres running
-  systemd:
+- name: 'Ensure {{ postgresql_service }} running'
+  ansible.builtin.systemd_service:
     name: '{{ postgresql_service }}'
-    state: started
-    enabled: True
-  become_method: sudo
+    state: restarted
+    enabled: true
   become_user: root
+  become_method: sudo
 
 - name: Query database for user API_KEY 
   become: true
@@ -18,13 +18,13 @@
   ignore_errors: yes  
 
 - name: Download user creation script 
-  get_url:
+  ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/Laniakea-elixir-it/Scripts/python3/galaxy_tools/py3_manage_bootstrap_user.py
     dest: "{{ laniakea_galaxy_server_dir }}/manage_bootstrap_user.py"
-    mode: 775
+    mode: 0755
   when: result.failed or not result.query_result[0].exists
 
-- name: Set Password from vault
+- name: Get Password from vault
   set_fact:
     GALAXY_ADMIN_PASSWORD: '{{ vault_secrets.data.admin_password }}'
   no_log: True
@@ -32,7 +32,7 @@
 
 - name: Create random admin user api key
   set_fact:
-    GALAXY_ADMIN_API_KEY: "{{ lookup('password', '/dev/null length=50') }}"
+    GALAXY_ADMIN_API_KEY: "{{ lookup('community.general.random_string', length=50, special=false) }}"
   no_log: True
   when: galaxy_admin_api_key == "random"
 
@@ -43,8 +43,6 @@
   when: galaxy_admin_api_key != "random"
 
 - name: Create galaxy user with API_KEY to install tools
-  # become: true
-  # become_user: galaxy
   shell:
     cmd: '. {{ laniakea_galaxy_venv_dir }}/bin/activate; 
           python3 manage_bootstrap_user.py
@@ -55,5 +53,3 @@
           -a {{ GALAXY_ADMIN_API_KEY }}'
     chdir: "{{ laniakea_galaxy_server_dir }}"
   when: result.failed or not result.query_result[0].exists
-
-#for centos change . to source if the task fail
