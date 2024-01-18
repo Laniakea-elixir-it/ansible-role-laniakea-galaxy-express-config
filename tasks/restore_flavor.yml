@@ -2,7 +2,28 @@
 #check if conda exist in export to do not extract the file 
 #testing phase task
 
-- name: check flavor file  existence 
+#______________________________________
+### Add CVMFS for tools
+
+- name: Download tools.elixir-italy-cvmfs config file
+  become: true
+  become_user: root
+  get_url:
+    url: 'https://raw.githubusercontent.com/Laniakea-elixir-it/tools-laniakea-cvmfs/main/{{ item.conf_file }}/{{ restore_cvmfs_repository}}.{{ item.ext }}'
+    dest: '/etc/cvmfs/{{ item.dest_dir }}/{{ restore_cvmfs_repository}}.{{ item.ext }}'
+    mode: '444'
+  with_items:
+    - { conf_file: cvmfs_server_config_files , dest_dir: config.d , ext: conf}
+    - { conf_file: cvmfs_server_keys , dest_dir: keys , ext: pub }
+
+- name: probe tools.elixir-italy-cvmfs
+  shell:
+    cmd: 'cvmfs_config probe {{ restore_cvmfs_repository }}'
+
+#______________________________________
+### Restore flavor
+
+- name: check flavor file existence 
   stat: 
     path: "/tmp/{{ galaxy_flavor }}"
   register: flavor
