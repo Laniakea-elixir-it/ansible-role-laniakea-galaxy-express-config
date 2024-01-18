@@ -1,14 +1,11 @@
 ---
-# restart services
-- name: Restart Galaxy
-  systemd:
-    name: "{{ 'galaxy' if (uwsgi_mode == 'mule') else 'galaxy-zergling@0'}}"
-    state: restarted
+# Restart services
+# Postgresql already up and running for user configuration
 
-- name: Restart proftpd
-  systemd:
-    name: proftpd
-    state: restarted
+#- name: Restart proftpd
+#  systemd:
+#    name: proftpd
+#    state: restarted
 
 - name: Restart nginx
   systemd:
