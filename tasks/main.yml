@@ -1,60 +1,68 @@
 ---
 # tasks file for ansible-role-lanikea-restore
-# mount elixir-it cvmfs containing flavour packages
 
-- include: configure_express.yml
+- name: Ensure Galaxy is stopped
+  debug:
+    msg: "Placeholder galaxyctl stop"
+
+- include: configure_os.yml
   become: yes
 
+### Always configure cvmfs and galaxyproject.org repository   
 - name: CVMFS
-  include_role: 
+  include_role:
     name: galaxyproject.cvmfs
   vars:
     cvmfs_role: client
     galaxy_cvmfs_repos_enabled: config-repo
 
-- name: download elixir-italy-cvmfs config
-  become: true
-  become_user: root
-  get_url:
-    url: 'https://raw.githubusercontent.com/Laniakea-elixir-it/tools-laniakea-cvmfs/main/{{ item.conf_file }}/{{ restore_cvmfs_repository}}.{{ item.ext }}'
-    dest: '/etc/cvmfs/{{ item.dest_dir }}/{{ restore_cvmfs_repository}}.{{ item.ext }}'
-    mode: '444'
-  with_items:
-    - { conf_file: cvmfs_server_config_files , dest_dir: config.d , ext: conf}
-    - { conf_file: cvmfs_server_keys , dest_dir: keys , ext: pub }
-
-- name: probe elixir cvmfs
-  shell:
-    cmd: 'cvmfs_config probe {{ restore_cvmfs_repository }}'
+### Configure Galaxy
+- include: configure_galaxy.yml
 
 ### install proftpd
-- include: proftpd.yml
-  become: yes
-  become_user: root
+#- include: proftpd.yml
+#  become: yes
+#  become_user: root
 
 ### install laniakea utils
-- name: Install laniakea-utils
-  include_role:
-    name: laniakea.laniakea_utils
+#- name: Install laniakea-utils
+#  include_role:
+#    name: laniakea.laniakea_utils
 
-####
+### Create Galaxy administrator
 - name: create admin user
   include: admin_user.yml
   become: true
   become_user: galaxy
- 
-## add selected flavor
+
+### Install and update miniconda if galaxy-minimal
+
+### Add selected flavor
 - include: restore_flavor.yml
   when: galaxy_flavor != 'galaxy-minimal'
 
-- include: nginx.yml
+### Setup NGINX
+#- include: nginx.yml
 
 - name: Set default job conf
   import_tasks: job_conf.yml
   become: yes
   become_user: galaxy
-  when: uwsgi_mode == "zerg"
 
-- include: refdata.yml
-
+### Restart all services and start Galaxy
 - include: service_restart.yml
+
+- name: Start Galaxy here
+  meta: flush_handlers
+
+### Wait Galaxy and Conda
+- name: Wait Galaxy
+  wait_for:
+    host: 127.0.0.1
+    port: '4001'
+    timeout: 300
+
+- name: Conda lock-file absent
+  file:
+    path: '{{ tool_deps_path }}/conda.lock'
+    state: absent
