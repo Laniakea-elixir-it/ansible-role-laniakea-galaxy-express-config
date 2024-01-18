@@ -1,0 +1,38 @@
+---
+
+# Currently we only mount and configure galaxyproject reference data.
+#
+#- name: "Mount galaxyproject and elixir-italy CVMFS"
+#  include_role:
+#    name: laniakea.cvmfs_client_config
+#  vars:
+#    elixir_it_repo: '{{ enable_elixir_it_cvmfs }}'
+#
+#- name: 'Set tool data table configuration for galaxy.yml with ELIXIR-IT cvmfs'
+#  set_fact:
+#  #tool_data_table_config_with_cvmfs: '/cvmfs/data.galaxyproject.org/byhand/location/tool_data_table_conf.xml,/cvmfs/data.elixir-italy-cvmfs/location/tool_data_table_conf.xml'
+#  #temporarly comment the multiple datatable because of refdata conflicts
+#    tool_data_table_config_with_cvmfs: '/cvmfs/data.elixir-italy-cvmfs/location/tool_data_table_conf.xml'
+#  when: enable_elixir_it_cvmfs
+
+- name: 'Set data.galaxyproject tool data table configuration for galaxy.yml'
+  set_fact:
+    tool_data_table_config_with_cvmfs: '/cvmfs/data.galaxyproject.org/byhand/location/tool_data_table_conf.xml'
+  when: not enable_elixir_it_cvmfs
+
+- name: Add test-toolshed
+  template:
+    src: 'tool_sheds_conf.xml.j2'
+    dest: '{{ laniakea_galaxy_config_dir }}/tool_sheds_conf.xml'
+  become: yes
+  become_user: galaxy
+
+- name: Update Galaxy configuration
+  template:
+    src: galaxy.yml.j2
+    dest: "{{ laniakea_galaxy_config_file }}"
+    owner: galaxy
+    group: galaxy
+  notify:
+    - galaxyctl update
+    - restart galaxy
