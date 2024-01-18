@@ -1,14 +1,14 @@
 galaxy_info:
-  author: pietro mandreoli
+  author: marco tangaro, pietro mandreoli
   description: Role to plant lanikaea flavor in a Galaxy-minimal instance.
   company: Unimi
   role_name: galaxy_express_config
   license: GPL-2.0-or-later
   min_ansible_version: 2.9
   platforms:
-    - name: CentOS
+    - name: RockyLinux
       versions:
-        - 7
+        - 9.3
   galaxy_tags:
     - Laniakea
     - Openstack
@@ -16,6 +16,6 @@ galaxy_info:
     - Bioinformatics
 
 dependencies:
-  - role: galaxyproject.cvmfs
-  - role: mtangaro.vault_secrets
-    when: retrieve_passphrase_from_vault
+  - galaxyproject.cvmfs
+   #  - role: mtangaro.vault_secrets
+   #    when: retrieve_passphrase_from_vault
