@@ -1,10 +1,5 @@
 ---
 
-- name: Stop Galaxy
-  systemd:
-    name: "{{ 'galaxy' if (uwsgi_mode == 'mule') else 'galaxy-zergling@0'}}"
-    state: stopped
-
 - name: Ensure sudo no password for galaxy user
   lineinfile:
     path: /etc/sudoers
@@ -19,13 +14,6 @@
     owner: '{{ laniakea_galaxy_user }}'
     group: '{{ laniakea_galaxy_group }}'
   with_items:
+    - "{{ export_dir }}"
     - "{{ tool_deps_path }}"
     - "{{ shed_tool_destination }}"
-    - "/var/log/galaxy"
-
-- name: Update Galaxy configuration
-  template:
-    src: galaxy.yml.j2
-    dest: "{{ laniakea_galaxy_config_file }}"
-    owner: galaxy
-    group: galaxy
