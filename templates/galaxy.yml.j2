@@ -34,6 +34,7 @@ galaxy:
     builds_file_path: {{ laniakea_galaxy_server_dir }}/tool-data/shared/ucsc/builds.txt.sample
     check_migrate_tools: false
     conda_prefix: {{ tool_deps_path }}/_conda
+    conda_ensure_channels: conda-forge,bioconda #not using defaults: https://github.com/conda/conda/issues/13238
     container_resolvers_config_file: ''
     data_dir: {{ galaxy_install_path }}/var
     data_manager_config_file: {{ laniakea_galaxy_server_dir }}/config/data_manager_conf.xml.sample
