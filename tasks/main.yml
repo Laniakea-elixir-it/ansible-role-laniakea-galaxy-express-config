@@ -36,6 +36,14 @@
   become_user: galaxy
 
 ### Install and update miniconda if galaxy-minimal
+- name: Install miniconda for galaxy-minimal
+  ansible.builtin.include_role:
+    name: galaxyproject.miniconda
+      #public: true
+  vars:
+    miniconda_prefix: '{{ export_dir }}/tool_deps/_conda'
+    miniconda_version: 23.9
+    miniconda_channels: ['conda-forge', 'bioconda']
 
 ### Add selected flavor
 - include: restore_flavor.yml
