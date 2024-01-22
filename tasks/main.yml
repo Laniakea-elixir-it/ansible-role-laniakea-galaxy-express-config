@@ -44,6 +44,8 @@
     miniconda_prefix: '{{ export_dir }}/tool_deps/_conda'
     miniconda_version: 23.9
     miniconda_channels: ['conda-forge', 'bioconda']
+  become: true
+  become_user: "{{ laniakea_galaxy_user }}"
 
 ### Add selected flavor
 - include: restore_flavor.yml
