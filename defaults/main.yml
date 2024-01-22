@@ -2,7 +2,7 @@
 # defaults file for ansible-role-lanikea-restore
 
 # Galaxy instance description
-galaxy_instance_description: "ELIXIR-Express"
+galaxy_instance_description: "laniakea-express"
 
 # Path to install the Galaxy software
 galaxy_FS_path: /home/galaxy
