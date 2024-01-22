@@ -15,7 +15,6 @@ galaxy_info:
     - Galaxy
     - Bioinformatics
 
-dependencies:
-  - galaxyproject.cvmfs
+dependencies: []
    #  - role: mtangaro.vault_secrets
    #    when: retrieve_passphrase_from_vault
