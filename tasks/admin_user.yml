@@ -1,6 +1,6 @@
 ---
 - name: Ensure postgresql service running
-  ansible.builtin.systemd_service:
+  systemd_service:
     name: '{{ postgresql_service }}'
     state: restarted
     enabled: true
@@ -18,7 +18,7 @@
   ignore_errors: yes  
 
 - name: Download user creation script 
-  ansible.builtin.get_url:
+  get_url:
     url: https://raw.githubusercontent.com/Laniakea-elixir-it/Scripts/python3/galaxy_tools/py3_manage_bootstrap_user.py
     dest: "{{ laniakea_galaxy_server_dir }}/manage_bootstrap_user.py"
     mode: 0755

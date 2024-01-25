@@ -5,21 +5,21 @@
 ## https://wiki.galaxyproject.org/Admin/Config/Performance/Cluster
 
 - name: if proc==4
-  ansible.builtin.set_fact:
+  set_fact:
     galaxy_workers: 2
     galaxy_local_slot: 2
     galaxy_registered_concurrent_jobs: 2
   when: ansible_processor_vcpus == 4
 
 - name: if proc==8
-  ansible.builtin.set_fact:
+  set_fact:
     galaxy_workers: 4
     galaxy_local_slot: 2
     galaxy_registered_concurrent_jobs: 2
   when: ansible_processor_vcpus == 8
 
 - name: if proc>=16
-  ansible.builtin.set_fact:
+  set_fact:
     galaxy_workers: 10
     galaxy_local_slot: 4
     galaxy_registered_concurrent_jobs: 2
