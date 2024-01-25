@@ -1,5 +1,5 @@
 ---
-- name: 'Ensure {{ postgresql_service }} running'
+- name: Ensure postgresql service running
   ansible.builtin.systemd_service:
     name: '{{ postgresql_service }}'
     state: restarted
