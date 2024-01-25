@@ -11,7 +11,7 @@
 ### Always configure cvmfs and galaxyproject.org repository   
 - name: CVMFS
   include_role:
-    name: galaxyproject.cvmfs
+    name: ansible-cvmfs
   vars:
     cvmfs_role: client
     galaxy_cvmfs_repos_enabled: config-repo
@@ -38,7 +38,7 @@
 ### Install and update miniconda if galaxy-minimal
 - name: Install miniconda for galaxy-minimal
   include_role:
-    name: galaxyproject.miniconda
+    name: ansible-miniconda
     apply:
       become: true
       become_user: galaxy

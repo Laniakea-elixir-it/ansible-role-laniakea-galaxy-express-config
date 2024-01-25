@@ -1,6 +1,6 @@
 ---
 - name: Ensure postgresql service running
-  systemd_service:
+  systemd:
     name: '{{ postgresql_service }}'
     state: restarted
     enabled: true
