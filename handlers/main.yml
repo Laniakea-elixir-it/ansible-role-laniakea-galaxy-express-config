@@ -5,6 +5,6 @@
   become: yes
 
 - name: 'galaxy gravity restart (Galaxy >=23.0)'
-  command: "{{ laniakea_galaxy_venv_dir }}/bin/galaxyctl -c {{ laniakea_galaxy_config_file }} graceful"
+  command: "{{ laniakea_galaxy_venv_dir }}/bin/galaxyctl -c {{ laniakea_galaxy_config_file }} restart"
   listen: "restart galaxy"
   become: yes
