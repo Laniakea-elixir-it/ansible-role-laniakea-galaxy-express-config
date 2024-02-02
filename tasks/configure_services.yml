@@ -7,10 +7,17 @@
 #    name: proftpd
 #    state: restarted
 
-- name: Restart nginx
+- name: Restart and enable NGINX
   systemd:
     name: nginx
     state: restarted
+    enabled: true
+
+- name: Disable firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: false
 
 - name: Restart docker
   systemd:

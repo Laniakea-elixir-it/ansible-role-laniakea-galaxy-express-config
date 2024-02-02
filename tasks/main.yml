@@ -60,7 +60,7 @@
   become_user: galaxy
 
 ### Restart all services and start Galaxy
-- include: service_restart.yml
+- include: configure_services.yml
 
 - name: Start Galaxy here
   meta: flush_handlers
@@ -72,6 +72,19 @@
     port: '4001'
     timeout: 300
 
+### Enable Galaxy if storage is encrypted
+- name: Check if storege is encrypted
+  stat:
+    path: /etc/luks/luks-cryptdev.ini
+  register: luks_config_file
+
+- name: Enable Galaxy
+  systemd: 
+    name: galaxy.target
+    enabled: true
+  when: not luks_config_file.stat.exists
+
+### Unlock Conda
 - name: Conda lock-file absent
   file:
     path: '{{ tool_deps_path }}/conda.lock'
