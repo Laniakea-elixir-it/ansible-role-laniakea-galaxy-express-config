@@ -89,7 +89,11 @@ galaxy_local_slot: 2
 galaxy_registered_concurrent_jobs: 2
 galaxy_unregistered_concurrent_jobs: 0
 galaxy_instance_codename: galaxy
-galaxy_lrms: local
+# galaxy_runner used by Galaxy.
+# Currently supported:
+# - local_env: for standard python backend
+# - condor: for HTCondor backend.
+galaxy_runner: local_env 
 
 #_____________________________________
 # Interactive tools
