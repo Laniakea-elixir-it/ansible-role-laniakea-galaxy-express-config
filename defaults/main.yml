@@ -93,7 +93,8 @@ galaxy_instance_codename: galaxy
 # Currently supported:
 # - local_env: for standard python backend
 # - condor: for HTCondor backend.
-galaxy_runner: local_env 
+galaxy_runner: local_env
+galaxy_lrms: local #TODO remove
 
 #_____________________________________
 # Interactive tools
