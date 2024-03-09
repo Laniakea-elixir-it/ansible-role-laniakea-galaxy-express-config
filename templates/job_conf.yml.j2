@@ -2,6 +2,10 @@ runners:
   local_runner:
     load: galaxy.jobs.runners.local:LocalJobRunner
     workers: 4
+{% if galaxy_runner == "condor" %}
+  condor:
+    load: galaxy.jobs.runners.condor:CondorJobRunner
+{% endif%}
 handling:
   assign: ['db-skip-locked']
 execution:
