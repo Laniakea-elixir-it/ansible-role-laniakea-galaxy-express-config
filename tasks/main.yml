@@ -24,11 +24,6 @@
 #  become: yes
 #  become_user: root
 
-### install laniakea utils
-#- name: Install laniakea-utils
-#  include_role:
-#    name: laniakea.laniakea_utils
-
 ### Create Galaxy administrator
 - name: create admin user
   include: admin_user.yml
