@@ -1,5 +1,5 @@
 galaxy_info:
-  author: marco tangaro, pietro mandreoli
+  author: marco tangaro
   description: Role to plant lanikaea flavor in a Galaxy-minimal instance.
   company: Unimi
   role_name: galaxy_express_config
@@ -14,7 +14,3 @@ galaxy_info:
     - Openstack
     - Galaxy
     - Bioinformatics
-
-dependencies:
-   - role: mtangaro.vault_secrets
-     when: retrieve_passphrase_from_vault
