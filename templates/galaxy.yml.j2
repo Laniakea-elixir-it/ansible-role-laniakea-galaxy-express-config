@@ -53,7 +53,7 @@ galaxy:
     galaxy_url_prefix: /galaxy
     install_database_connection: postgresql:///galaxy_tools?host=/var/run/postgresql
     integrated_tool_panel_config: {{ laniakea_galaxy_config_dir }}/integrated_tool_panel.xml
-    job_metrics_config_file: {{ laniakea_galaxy_config_dir }}/job_metrics_conf.xml
+    job_metrics_config_file: {{ laniakea_galaxy_config_dir }}/job_metrics_conf.yml
     job_working_directory: {{ database_path }}/job_working_directory
     migrated_tools_config: {{ laniakea_galaxy_config_dir }}/migrated_tools_conf.xml
     new_user_dataset_access_role_default_private: true
