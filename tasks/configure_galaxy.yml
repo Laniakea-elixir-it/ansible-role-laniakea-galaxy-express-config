@@ -27,6 +27,13 @@
   become: yes
   become_user: galaxy
 
+- name: Enable job metrics
+  blockinfile:
+    path: '{{ laniakea_galaxy_config_dir }}/job_metrics_conf.yml'
+    create: true
+    content: |
+      - type: core
+
 - name: Update Galaxy configuration
   template:
     src: galaxy.yml.j2
