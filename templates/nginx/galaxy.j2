@@ -68,7 +68,7 @@ server {
                   $vis_d/static/$static_file =404;
     }
 
-{% if enable_galaxy_ie %}
+{% if enable_interactive_tools %}
     # Global GIE configuration
     location /galaxy/gie_proxy {
             proxy_pass http://127.0.0.1:8000/gie_proxy;
