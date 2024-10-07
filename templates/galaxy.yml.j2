@@ -6,7 +6,7 @@ gravity:
     galaxy_root: {{ laniakea_galaxy_server_dir }}
     galaxy_user: galaxy
     gunicorn:
-        bind: "unix:{{ galaxy_mutable_config_dir }}/gunicorn.sock"
+        bind: "unix:{{ laniakea_galaxy_config_dir }}/gunicorn.sock"
         extra_args: --forwarded-allow-ips="*"
         preload: true
         workers: 2
