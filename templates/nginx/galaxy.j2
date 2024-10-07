@@ -3,7 +3,7 @@ upstream galaxy {
 
     # Or if you serve galaxy at a path like http(s)://fqdn/galaxy
     # Remember to set galaxy_url_prefix in the galaxy.yml file.
-    # server unix:{{ galaxy_mutable_config_dir }}/gunicorn.sock:/galaxy;
+    # server unix:{{ laniakea_galaxy_config_dir }}/gunicorn.sock:/galaxy;
 }
 
 server {
