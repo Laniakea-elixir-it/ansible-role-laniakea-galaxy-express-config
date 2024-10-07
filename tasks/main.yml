@@ -64,7 +64,7 @@
 - name: Wait Galaxy
   wait_for:
     host: 127.0.0.1
-    path: 'unix:{{ laniakea_galaxy_config_dir }}/gunicorn.sock'
+    path: '{{ laniakea_galaxy_config_dir }}/gunicorn.sock'
     timeout: 500
 
 ### Enable Galaxy if storage is encrypted
