@@ -1,4 +1,4 @@
-- name: configure nginx for upload store and /galaxy prefix
+- name: Update galaxy configuration in NGINX
   become: yes
   become_user: root
   template:
