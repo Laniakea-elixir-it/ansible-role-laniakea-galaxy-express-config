@@ -39,7 +39,7 @@
       become_user: galaxy
   vars:
     miniconda_prefix: '{{ export_dir }}/tool_deps/_conda'
-    miniconda_version: 23.9
+    miniconda_version: 24.11.2
     miniconda_channels: ['conda-forge', 'bioconda']
 
 ### Add selected flavor
