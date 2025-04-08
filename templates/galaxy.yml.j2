@@ -6,7 +6,7 @@ gravity:
     galaxy_root: {{ laniakea_galaxy_server_dir }}
     galaxy_user: galaxy
     gunicorn:
-        bind: 127.0.0.1:4001
+        bind: "unix:{{ laniakea_galaxy_config_dir }}/gunicorn.sock"
         extra_args: --forwarded-allow-ips="*"
         preload: true
         workers: 2
@@ -34,11 +34,13 @@ galaxy:
     builds_file_path: {{ laniakea_galaxy_server_dir }}/tool-data/shared/ucsc/builds.txt.sample
     check_migrate_tools: false
     conda_prefix: {{ tool_deps_path }}/_conda
-    conda_ensure_channels: conda-forge,bioconda #not using defaults: https://github.com/conda/conda/issues/13238
+    conda_auto_install: true
+    conda_ensure_channels: 'iuc,conda-forge,bioconda,bgruening' #not using defaults: https://github.com/conda/conda/issues/13238
     container_resolvers_config_file: ''
     data_dir: {{ galaxy_install_path }}/var
     data_manager_config_file: {{ laniakea_galaxy_server_dir }}/config/data_manager_conf.xml.sample
     database_connection: postgresql:///galaxy?host=/var/run/postgresql
+    database_engine_option_server_side_cursors: true
     datatypes_config_file: {{ laniakea_galaxy_server_dir }}/config/datatypes_conf.xml.sample
     dependency_resolvers_config_file: {{ galaxy_install_path }}/config/dependency_resolvers_conf.xml
     enable_per_request_sql_debugging: true
@@ -53,7 +55,7 @@ galaxy:
     galaxy_url_prefix: /galaxy
     install_database_connection: postgresql:///galaxy_tools?host=/var/run/postgresql
     integrated_tool_panel_config: {{ laniakea_galaxy_config_dir }}/integrated_tool_panel.xml
-    job_metrics_config_file: {{ laniakea_galaxy_config_dir }}/job_metrics_conf.xml
+    job_metrics_config_file: {{ laniakea_galaxy_config_dir }}/job_metrics_conf.yml
     job_working_directory: {{ database_path }}/job_working_directory
     migrated_tools_config: {{ laniakea_galaxy_config_dir }}/migrated_tools_conf.xml
     new_user_dataset_access_role_default_private: true

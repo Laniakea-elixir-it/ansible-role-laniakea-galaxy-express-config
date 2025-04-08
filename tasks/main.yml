@@ -39,7 +39,7 @@
       become_user: galaxy
   vars:
     miniconda_prefix: '{{ export_dir }}/tool_deps/_conda'
-    miniconda_version: 23.9
+    miniconda_version: 24.11.2
     miniconda_channels: ['conda-forge', 'bioconda']
 
 ### Add selected flavor
@@ -47,7 +47,7 @@
   when: galaxy_flavor != 'galaxy-minimal'
 
 ### Setup NGINX
-#- include: nginx.yml
+- include: nginx.yml
 
 - name: Set default job conf
   import_tasks: job_conf.yml
@@ -64,8 +64,8 @@
 - name: Wait Galaxy
   wait_for:
     host: 127.0.0.1
-    port: '4001'
-    timeout: 300
+    path: '{{ laniakea_galaxy_config_dir }}/gunicorn.sock'
+    timeout: 500
 
 ### Enable Galaxy if storage is encrypted
 - name: Check if storege is encrypted

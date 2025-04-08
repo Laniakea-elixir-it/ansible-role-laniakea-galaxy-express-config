@@ -24,11 +24,11 @@
     mode: 0755
   when: result.failed or not result.query_result[0].exists
 
-- name: Get Password from vault
+- name: Get admin_password from vault if available
   set_fact:
-    GALAXY_ADMIN_PASSWORD: '{{ vault_secrets.data.admin_password }}'
+    GALAXY_ADMIN_PASSWORD: '{{ admin_password }}'
   no_log: True
-  when: retrieve_passphrase_from_vault
+  when: admin_password is defined
 
 - name: Create random admin user api key
   set_fact:

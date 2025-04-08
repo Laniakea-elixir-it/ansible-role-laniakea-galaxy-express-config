@@ -1,28 +1,26 @@
-- name: configure nginx for upload store and /galaxy prefix
+- name: Update galaxy configuration in NGINX
   become: yes
   become_user: root
   template:
     src: nginx/galaxy.j2
     dest: /etc/nginx/sites-available/galaxy
-    mode: 0644
+    mode: 0444
     backup: yes
 
-- name: Configure nginx for interactive tools
-  become: yes
-  become_user: root
-  template:
-    src: nginx/galaxy-gie-proxy.j2
-    dest: /etc/nginx/sites-available/galaxy-gie-proxy
-    mode: 0644
-    backup: yes
-  when: enable_interactive_tools
-
-- name: create nginx upload store path
-  file: 
-    path: /export/galaxy/database/tmp/nginx_upload_store
-    owner: galaxy
-    group: galaxy
-    state: directory
-    mode: 755
-  
-
+#- name: Configure nginx for interactive tools
+#  become: yes
+#  become_user: root
+#  template:
+#    src: nginx/galaxy-gie-proxy.j2
+#    dest: /etc/nginx/sites-available/galaxy-gie-proxy
+#    mode: 0644
+#    backup: yes
+#  when: enable_interactive_tools
+#
+#- name: create nginx upload store path
+#  file: 
+#    path: /export/galaxy/database/tmp/nginx_upload_store
+#    owner: galaxy
+#    group: galaxy
+#    state: directory
+#    mode: 755
