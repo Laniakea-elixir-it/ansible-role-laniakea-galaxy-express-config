@@ -8,7 +8,7 @@
     patterns: '^[0-9]+$'   # es. 12, 15
   register: pg_dirs
 
-- name: get higher pgsql version
+- name: Get higher pgsql version
   ansible.builtin.set_fact:
     pg_version: >-
       {{ (pg_dirs.files
@@ -19,6 +19,12 @@
           | list
           | sort
           | last) | default(omit) }}
+
+- debug:
+    msg: '{{ pg_dirs }}'
+
+- debug:
+    msg: '{{ pg_version }}'
 
 - name: If no pgsql fail
   ansible.builtin.fail:
