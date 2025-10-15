@@ -24,6 +24,10 @@
 #  become: yes
 #  become_user: root
 
+### Start PostgreSQL
+- name: Detect PostgreSQL version and turn it on
+  include: start_pgsql.yml
+
 ### Create Galaxy administrator
 - name: create admin user
   include: admin_user.yml

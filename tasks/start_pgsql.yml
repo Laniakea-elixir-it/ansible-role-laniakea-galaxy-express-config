@@ -1,0 +1,36 @@
+---
+- name: Locate pgsql dir
+  ansible.builtin.find:
+    paths: /var/lib/pgsql
+    file_type: directory
+    recurse: no
+    use_regex: yes
+    patterns: '^[0-9]+$'   # es. 12, 15
+  register: pg_dirs
+
+- name: get higher pgsql version
+  ansible.builtin.set_fact:
+    pg_version: >-
+      {{ (pg_dirs.files
+          | map(attribute='path')
+          | map('basename')
+          | select('match','^[0-9]+$')
+          | map('int')
+          | list
+          | sort
+          | last) | default(omit) }}
+
+- name: If no pgsql fail
+  ansible.builtin.fail:
+    msg: "No pgsql version found in /var/lib/pgsql/"
+  when: pg_version is not defined
+
+- name: Set pgsql service name
+  ansible.builtin.set_fact:
+    postgresql_service_name: "postgresql_{{ pg_version }}"
+
+- name: Start pgsql
+  ansible.builtin.service:
+    name: "{{ postgresql_service_name }}"
+    state: started
+    enabled: yes
