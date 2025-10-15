@@ -20,12 +20,6 @@
           | sort
           | last) | default(omit) }}
 
-- debug:
-    msg: '{{ pg_dirs }}'
-
-- debug:
-    msg: '{{ pg_version }}'
-
 - name: If no pgsql fail
   ansible.builtin.fail:
     msg: "No pgsql version found in /var/lib/pgsql/"
@@ -33,7 +27,7 @@
 
 - name: Set pgsql service name
   ansible.builtin.set_fact:
-    postgresql_service_name: "postgresql_{{ pg_version }}"
+    postgresql_service_name: "postgresql-{{ pg_version }}"
 
 - name: Start pgsql
   ansible.builtin.service:
