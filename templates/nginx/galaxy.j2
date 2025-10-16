@@ -56,7 +56,7 @@ server {
     # automatically copied around. The welcome page is one of them. In
     # production, this step is skipped, so we will manually alias that.
     location /galaxy/static/welcome.html {
-        alias {{ laniakea_galaxy_server_dir }}/static/welcome.html.sample;
+        alias {{ laniakea_galaxy_server_dir }}/static/welcome.html;
         expires 24h;
     }
 

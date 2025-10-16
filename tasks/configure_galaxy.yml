@@ -17,7 +17,7 @@
 
 - name: 'Set data.galaxyproject tool data table configuration for galaxy.yml'
   set_fact:
-    tool_data_table_config_with_cvmfs: '/cvmfs/data.galaxyproject.org/byhand/location/tool_data_table_conf.xml'
+    tool_data_table_config_with_cvmfs: '/cvmfs/data.galaxyproject.org/byhand/location/tool_data_table_conf.xml,/cvmfs/data.galaxyproject.org/managed/location/tool_data_table_conf.xml'
   when: not enable_elixir_it_cvmfs
 
 - name: Add test-toolshed
@@ -43,3 +43,12 @@
   notify:
     - galaxyctl update
     - restart galaxy
+
+- name: Deploy custom Galaxy welcome page
+  copy:
+    src: galaxy_custom_welcome.html
+    dest: '{{ laniakea_galaxy_server_dir }}/static/welcome.html'
+    owner: galaxy
+    group: galaxy
+    mode: "0644"
+  become: true
