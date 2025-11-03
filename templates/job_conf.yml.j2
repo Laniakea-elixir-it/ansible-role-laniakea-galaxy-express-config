@@ -18,7 +18,7 @@ execution:
 {% if galaxy_runner == "condor" %}
     condor:
       runner: condor
-{% if galaxy_runner == "tpv_dispatcher" %}
+{% elif galaxy_runner == "tpv_dispatcher" %}
     tpv_dispatcher:
       runner: dynamic
       type: python
@@ -27,7 +27,7 @@ execution:
       tpv_config_files:
         - https://raw.githubusercontent.com/galaxyproject/tpv-shared-database/main/tools.yml
         - {{ laniakea_galaxy_config_dir }}/tpv_rules_local.yml
-{% endif%}
+{% endif %}
 tools:
   - class: local # these special tools that aren't parameterized for remote execution - expression tools, upload, etc
     environment: local_env
