@@ -43,3 +43,11 @@
   template:
     src: 'job_conf.yml.j2'
     dest: '{{ laniakea_galaxy_config_dir }}/job_conf.yml'
+
+# TPV is enabled only for HTCondor configurations.
+# This task takes executors CPUs and Ram to configure TPV condor limits.
+- name: Copy tpv configuration file
+  template:
+    src: 'galaxy/tpv_rules_local.yml.j2'
+    dest: '{{ laniakea_galaxy_config_dir }}/tpv_rules_local.yml'
+  when: galaxy_runner == 'tpv_dispatcher'
