@@ -2,7 +2,7 @@ runners:
   local_runner:
     load: galaxy.jobs.runners.local:LocalJobRunner
     workers: 4
-{% if galaxy_runner == "condor" %}
+{% if galaxy_runner == "condor" or galaxy_runner == "tpv_dispatcher"%}
   condor:
     load: galaxy.jobs.runners.condor:CondorJobRunner
 {% endif%}
@@ -15,7 +15,7 @@ execution:
       runner: local_runner
       local_slots: {{ galaxy_workers }}
       tmp_dir: true
-{% if galaxy_runner == "condor" %}
+{% if galaxy_runner == "condor" or galaxy_runner == "tpv_dispatcher" %}
     condor:
       runner: condor
 {% elif galaxy_runner == "tpv_dispatcher" %}
