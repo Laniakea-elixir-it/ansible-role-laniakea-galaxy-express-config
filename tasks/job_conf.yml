@@ -50,7 +50,7 @@
   pip:
     name: total-perspective-vortex==2.5.0
     virtualenv: '{{ laniakea_galaxy_venv_dir }}'
-  when: galaxy_runner == 'tpv_dispatcher
+  when: galaxy_runner == 'tpv_dispatcher'
 
 - name: Copy tpv configuration file
   template:
