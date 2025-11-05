@@ -46,6 +46,12 @@
 
 # TPV is enabled only for HTCondor configurations.
 # This task takes executors CPUs and Ram to configure TPV condor limits.
+- name: Install TPV
+  pip:
+    name: total-perspective-vortex==2.5.0
+    virtualenv: '{{ laniakea_galaxy_venv_dir }}'
+  when: galaxy_runner == 'tpv_dispatcher
+
 - name: Copy tpv configuration file
   template:
     src: 'galaxy/tpv_rules_local.yml.j2'
