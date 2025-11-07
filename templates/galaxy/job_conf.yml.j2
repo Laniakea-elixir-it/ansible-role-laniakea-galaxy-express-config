@@ -18,7 +18,8 @@ execution:
 {% if galaxy_runner == "condor" or galaxy_runner == "tpv_dispatcher" %}
     condor:
       runner: condor
-{% elif galaxy_runner == "tpv_dispatcher" %}
+{% endif %}
+{% if galaxy_runner == "tpv_dispatcher" %}
     tpv_dispatcher:
       runner: dynamic
       type: python
