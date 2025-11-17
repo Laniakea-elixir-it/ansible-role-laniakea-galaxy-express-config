@@ -81,6 +81,7 @@ galaxy:
     #container_image_cache_path: {{ galaxy_install_path }}/var/cache/container_cache
     #ftp_upload_dir: {{ database_path }}/ftp
     #ftp_upload_site: ftp://localhost
+    sanitize_all_html: false
 {% if enable_interactive_tools %}
     interactivetools_enable: true
     interactivetools_map: {{ gie_proxy.session_path }}
