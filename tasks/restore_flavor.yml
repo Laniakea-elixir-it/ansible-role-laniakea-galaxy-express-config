@@ -52,20 +52,23 @@
 #    - "{{ tool_deps_path }}"
 #    - "{{ shed_tool_destination }}"
 
-- name: "Recover right (image, galaxy release) couple"
+- name: Parse galaxy_flavor string
   set_fact:
-    image: "{{ galaxy_version.split(',').0 }}"
-    galaxy_version: "{{ galaxy_version.split(',').1 }}"
+    package: "{{ galaxy_flavor }}"
+    image: "{{ galaxy_flavor.split('__')[0] }}"
+    galaxy_release: "{{ galaxy_flavor.split('__')[1] }}"
+    galaxy_flavor_name: "{{ galaxy_flavor.split('__')[2] }}"
+    galaxy_flavor_version: "{{ galaxy_flavor.split('__')[3] }}"
 
 - name: run python script to restore flavor
   become: true
-  command: /tmp/express-cvmfs-restore.py -i {{ image }} -f {{ galaxy_flavor }} -v {{ galaxy_flavor_version }} -g {{ galaxy_version }}
+  command: /tmp/express-cvmfs-restore.py -f {{ galaxy_flavor_name }} -p {{ package }}
   when: not flavor.stat.exists
   register: restore_script
 
 - name: check if dir workflows exists
   stat: 
-    path: "/cvmfs/{{ restore_cvmfs_repository }}/dump/{{ image }}_{{ galaxy_version }}_{{ galaxy_flavor }}_{{ galaxy_flavor_version }}/workflows"
+    path: "/cvmfs/{{ restore_cvmfs_repository }}/dump/{{ gaalaxy_flavor_name }}/workflows"
   register: workflows
 
 - name: install workflows  
