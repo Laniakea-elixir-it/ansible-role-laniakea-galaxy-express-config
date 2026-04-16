@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import glob
 
+galaxy_config_file='{{ laniakea_galaxy_config_file }}'
 conda_destination='{{ tool_deps_path }}/' 
 shed_tool_destination='{{ shed_tool_destination }}/'
 cvmfs= "{{ restore_cvmfs_repository }}"
@@ -18,9 +19,7 @@ config_dir='{{ laniakea_galaxy_config_dir }}'
 def parse_cli_options():
   parser = argparse.ArgumentParser(description='untar flavor packages', formatter_class=argparse.RawTextHelpFormatter)
   parser.add_argument( '-f', '--flavor',  dest='flavor', default=None , help='galaxy flavor')
-  parser.add_argument( '-v', '--version',  dest='version', default=1 , help='galaxy flavor version')
-  parser.add_argument( '-g', '--galaxy',  dest='galaxy', default=20.05 , help='galaxy release')
-  parser.add_argument( '-i', '--image',  dest='image', default="galaxy-express_v3.0.2" , help='galaxy release')
+  parser.add_argument( '-p', '--package',  dest='package', default="galaxy-express,release_24.2_v1.0.4__release_24.2__galaxy-testing__6" , help='galaxy express package')
   return parser.parse_args()
 
 def run_command(cmd, logger=None):
@@ -40,7 +39,7 @@ def run_command(cmd, logger=None):
 
 def define_packages_path():
     options = parse_cli_options()
-    package_path= cvmfs_dump + str(options.image)+'_'+str(options.galaxy)+'_'+str(options.flavor)+'_'+str(options.version)+'/'
+    package_path= cvmfs_dump + str(options.package)+'/'
     return package_path
 
 def extract_tar_gz(tar_file, destination):
@@ -87,8 +86,8 @@ def untar_conda_and_shell():
 
 # bash restore postgresql pg_restore -d db_name /path/to/your/file/dump_name.tar -c -U db_user
 def manage_services(smd_cmd):
-  run_command("sudo systemctl " + smd_cmd + " galaxy")
-  run_command("sudo systemctl " + smd_cmd + " nginx")
+  run_command("galaxyctl -c" + galaxy_config_file + ' '  + smd_cmd)
+  run_command("systemctl " + smd_cmd + " nginx")
 
 def restore_dump():
   package_path = define_packages_path()
@@ -112,7 +111,7 @@ def main():
   manage_services("stop")
   untar_conda_and_shell()
   restore_dump()
-  manage_services("start")
+  manage_services("restart")
   check_cvmfs()
   lock_file()
 

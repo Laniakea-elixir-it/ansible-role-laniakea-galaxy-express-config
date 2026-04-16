@@ -1,12 +1,4 @@
 ---
-- name: Ensure postgresql service running
-  systemd:
-    name: '{{ postgresql_service }}'
-    state: restarted
-    enabled: true
-  become_user: root
-  become_method: sudo
-
 - name: Query database for user API_KEY 
   become: true
   become_user: postgres
