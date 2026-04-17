@@ -70,11 +70,11 @@ def clean_destinations():
         if os.path.isdir(f):
             shutil.rmtree(f)
         else:
-            os.remove(f
+            os.remove(f)
 
 # Flavors available here https://laniakea-elixir-it.github.io/galaxy-flavors
 # and on elixir-italy-cvmfs
-## e.g galaxy-express,release_24.2_v1.0.4__release_24.2__galaxy-testing__6
+# e.g galaxy-express,release_24.2_v1.0.4__release_24.2__galaxy-testing__6
 def untar_conda_and_shell():
     package_path = define_packages_path()
     conda_file = package_path + 'tar_conda.tar.gz'
