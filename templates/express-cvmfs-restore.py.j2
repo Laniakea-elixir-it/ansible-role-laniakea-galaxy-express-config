@@ -57,16 +57,24 @@ def check_cvmfs():
     else:
         raise ValueError('THE CVMFS is Not MOUNTED')
 
-
+# Clean the environment, both for directory and files
 def clean_destinations():
     conda = glob.glob(conda_destination + '*')
     shed_tools = glob.glob(shed_tool_destination + '*')
     for f in conda:
-      shutil.rmtree(f)
+        if os.path.isdir(f):
+            shutil.rmtree(f)
+        else:
+            os.remove(f)
     for f in shed_tools:
-      shutil.rmtree(f)
+        if os.path.isdir(f):
+            shutil.rmtree(f)
+        else:
+            os.remove(f
 
-##e.g release_20.05_galaxy-testing-lite_1
+# Flavors available here https://laniakea-elixir-it.github.io/galaxy-flavors
+# and on elixir-italy-cvmfs
+## e.g galaxy-express,release_24.2_v1.0.4__release_24.2__galaxy-testing__6
 def untar_conda_and_shell():
     package_path = define_packages_path()
     conda_file = package_path + 'tar_conda.tar.gz'
@@ -108,10 +116,10 @@ def lock_file():
 
 def main():
 
-  manage_services("stop")
+  #manage_services("stop") # galaxy is started later. So we don't stop/restart galaxy and nginx
   untar_conda_and_shell()
   restore_dump()
-  manage_services("restart")
+  #manage_services("restart")
   check_cvmfs()
   lock_file()
 
