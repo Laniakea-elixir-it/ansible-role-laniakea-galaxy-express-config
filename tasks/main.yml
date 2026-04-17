@@ -45,6 +45,7 @@
     miniconda_prefix: '{{ export_dir }}/tool_deps/_conda'
     miniconda_version: 25.7.0
     miniconda_channels: ['conda-forge', 'bioconda']
+  when: galaxy_flavor == 'galaxy-minimal'
 
 ### Add selected flavor
 - include: restore_flavor.yml
