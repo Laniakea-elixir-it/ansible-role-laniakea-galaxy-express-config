@@ -28,11 +28,6 @@
     path: "/tmp/{{ galaxy_flavor }}"
   register: flavor
 
-- name: install ephemeris for workflow installation
-  pip:
-    name: ephemeris
-    virtualenv: '{{ laniakea_galaxy_venv_dir }}'
-
 - name: upload the python script for database restore 
   become: true
   template:

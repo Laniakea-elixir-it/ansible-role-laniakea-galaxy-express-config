@@ -5,6 +5,14 @@
     path: "/cvmfs/{{ restore_cvmfs_repository }}/dump/{{ galaxy_flavor_name }}/workflows"
   register: workflows
 
+- name: install ephemeris for workflow installation
+  pip:
+    name: ephemeris
+    virtualenv: '{{ laniakea_galaxy_venv_dir }}'
+  when: workflows.stat.exists
+  tags:
+    - workflow
+
 - name: install workflows
   become: true
   become_user: galaxy
