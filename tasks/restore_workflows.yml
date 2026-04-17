@@ -2,7 +2,7 @@
 # All variables are set in restore_flavor recipe.
 - name: Check if dir workflows exists
   stat:
-    path: "/cvmfs/{{ restore_cvmfs_repository }}/dump/{{ galaxy_flavor_name }}/workflows"
+    path: "/cvmfs/{{ restore_cvmfs_repository }}/dump/{{ package }}/workflows"
   register: workflows
 
 - name: install ephemeris for workflow installation
