@@ -66,17 +66,5 @@
   when: not flavor.stat.exists
   register: restore_script
 
-- name: check if dir workflows exists
-  stat: 
-    path: "/cvmfs/{{ restore_cvmfs_repository }}/dump/{{ gaalaxy_flavor_name }}/workflows"
-  register: workflows
-
-- name: install workflows  
-  become: true
-  become_user: galaxy
-  shell: '. {{ laniakea_galaxy_venv_dir }}/bin/activate && workflow-install \
-  -w {{ workflows.stat.path }} \ 
-  -a {{ GALAXY_ADMIN_API_KEY }} -g http://localhost:80'
-  when: workflows.stat.exists
-  tags:
-    - workflows
+# workflows are restored in the restore_workflows yaml,
+# since here galaxy is not turned on.

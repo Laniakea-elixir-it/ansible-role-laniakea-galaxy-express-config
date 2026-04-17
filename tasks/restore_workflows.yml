@@ -1,0 +1,17 @@
+---
+# All variables are set in restore_flavor recipe.
+- name: Check if dir workflows exists
+  stat:
+    path: "/cvmfs/{{ restore_cvmfs_repository }}/dump/{{ galaxy_flavor_name }}/workflows"
+  register: workflows
+
+- name: install workflows
+  become: true
+  become_user: galaxy
+  shell: '. {{ laniakea_galaxy_venv_dir }}/bin/activate && workflow-install \
+  -w {{ workflows.stat.path }} \
+  -a {{ GALAXY_ADMIN_API_KEY }} \
+  -g http://localhost:80/galaxy/'
+  when: workflows.stat.exists
+  tags:
+    - workflow
