@@ -43,7 +43,7 @@
       become_user: galaxy
   vars:
     miniconda_prefix: '{{ export_dir }}/tool_deps/_conda'
-    miniconda_version: 25.7.0
+    miniconda_version: 26.3.2
     miniconda_channels: ['conda-forge', 'bioconda']
   when: galaxy_flavor == 'galaxy-minimal'
 
